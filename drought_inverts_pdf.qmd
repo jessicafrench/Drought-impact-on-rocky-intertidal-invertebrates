@@ -15,8 +15,6 @@ library(sf)
 library(tidyverse)
 library(lubridate)
 library(lfe)
-library(slider)
-library(tsibble)
 library(patchwork)
 library(gtsummary)
 library(gt)
@@ -55,9 +53,9 @@ west_coast <- us_states |>
 
 # Introduction
 
-The rocky intertidal zone is one of the most complex and challenging ecosystems in the world ^1,2,4^. Within a single tidal cycle, organisms are exposed to a wide range of environmental extremes. During high tide organisms are exposed to crashing waves and debris that can dislodge or crush them while low tide brings the risk of extreme heat and desiccation ^1,2,4,5^. Predation, competition, oceanographic conditions, and resource availability are ever present and add to the already overwhelming complexity of this habitat ^1,2,6^. With so much going on in such a small area the rocky intertidal zone has been used as a natural laboratory for ecologists seeking to understand species interactions and responses to environmental extremes ^2^. An enormous amount of research has been conducted in rocky intertidal zones all over the world but noticeably absent from this body of work is how drought might impact intertidal organisms ^7^.
+The rocky intertidal zone is one of the most complex and challenging ecosystems in the world ^1,2,4^. Within a single tidal cycle, organisms are exposed to a wide range of environmental extremes. During high tide organisms experience crashing waves and debris that can dislodge or crush them, while low tide brings the risk of extreme heat and desiccation ^1,2,4,5^. Predation, competition, oceanographic conditions, and resource availability are ever present and add to the already overwhelming complexity of this habitat ^1,2,6^. With so much going on in such a small area the rocky intertidal zone has been used as a natural laboratory for ecologists seeking to understand species interactions and responses to environmental extremes ^2^. An enormous amount of research has been conducted in rocky intertidal zones all over the world but noticeably absent from this body of work is how drought might impact intertidal organisms ^7^.
 
-With climate change and changing patterns of precipitation, droughts are expected to occur more frequently and with greater severity and duration ^8^. Drought has been shown to impact species abundance and composition in freshwater stream communities through reduction in pool connectivity and increasing predation ^9^. In the rocky intertidal zone, I think reduction in terrestrial organic matter is a more likely cause of reduced abundance and diversity during drought. Small streams that drain directly into the ocean transport TOM in the form of leaf litter that is consumed by motile invertebrate grazers in the intertidal ^10^. Food availability throughout the year can have major impacts on reproductive output, larvae survival, and recruitment ^10,11^. This is why I hypothesize that drought will negatively impact abundance and diversity of motile invertebrates in the rocky intertidal zone in the Coast Range Ecoregion of California (Fig 1).
+With climate change and changing patterns of precipitation, droughts are expected to occur more frequently and with greater severity and duration ^8^. Drought has been shown to impact species abundance and composition in freshwater stream invertebrate communities through reduction in pool connectivity and increasing predation ^9^. In the rocky intertidal zone reduction in terrestrial organic matter (TOM) is a more likely cause of reduced abundance and diversity during drought. Small streams that drain directly into the ocean transport TOM in the form of leaf litter that is consumed by motile invertebrate grazers in the intertidal ^10^. Food availability throughout the year can have major impacts on reproductive output, larvae survival, and recruitment ^10,11^. This is why I hypothesize that drought will negatively impact abundance and diversity of motile invertebrates in the rocky intertidal zone in the Coast Range Ecoregion of California (Fig 1).
 
 ```{r echo = FALSE, include = FALSE}
 # set tmap to interactive
@@ -85,15 +83,15 @@ eco_site_map <-
 eco_site_map
 ```
 
-~Fig. 1 Map showing the site locations and extent of the Coast Range Ecoregion.~
+~Fig.~ ~1~ ~Map~ ~showing~ ~the~ ~site~ ~locations~ ~and~ ~extent~ ~of~ ~the~ ~Coast~ ~Range~ ~Ecoregion.~
 
 # Data Description
 
 To test my hypothesis, I used motile invertebrate count data from Multi-Agency Rocky Intertidal Network through UC Santa Cruz and drought impact data from U.S. Drought Monitor produced by a partnership between the National Drought Mitigation Center (NDMC) at the University of Nebraska-Lincoln, the National Oceanic and Atmospheric Administration (NOAA), and the U.S. Department of Agriculture (USDA) ^12^.
 
-The motile invertebrate count data was the result of long-term monitoring efforts from multiple agencies and includes counts of species from 1999 to 2019 at intertidal sites along the West Coast of The United States ^13^. Observations were made in summer (June-September), fall (October-January), or spring (February-May) ^14^. For this analysis, only observations from spring and fall were considered in an attempt to limit the affect of extreme heat as a confounding variable. To ensure similarity in climate and broad scale ecological factors sites were filtered to the Coast Range level III ecoregion defined by the EPA ^15^.
+The motile invertebrate count data was the result of long-term monitoring efforts from multiple agencies and includes counts of species from 1999 to 2019 at intertidal sites along the West Coast of The United States ^13^. Observations were made in summer (June-September), fall (October-January), or spring (February-May) ^14^. For this analysis, only observations from spring and fall were considered in an attempt to limit the affect of extreme heat as a confounding variable. To ensure similarity in climate and broad scale ecological factors only sites in the Coast Range level III ecoregion, defined by the EPA, were included  ^15^.
 
-The drought impact data was in the form of polygons indicating the level of drought impact in that area. Drought impact levels are determined from a range of drought indexes and range from D0-Abnormally dry to D4-Exceptional drought. More information about how these levels are determined can be found on U.S. Drought Monitor's website. Drought condition for each observation was determined by finding the drought polygons that each site fell into spatially and temporally overlapped with the observation. Because the temporal resolution of the invertebrate counts is four months each observation potentially fell into multiple polygons, the most severe drought condition was chosen as the drought condition for the observation.
+The drought impact data were in the form of polygons indicating the level of drought impact in that area. Drought impact levels are determined from a range of drought indices and range from D0-Abnormally dry to D4-Exceptional drought. More information about how these levels are determined can be found on U.S. Drought Monitor's [website](https://droughtmonitor.unl.edu/About/AbouttheData/DroughtClassification.aspx). Drought condition for each observation was determined by finding the drought polygons that each site fell into spatially and temporally overlapped with the observation. Because the temporal resolution of the invertebrate counts is four months each observation potentially fell into multiple polygons, the most severe drought condition was chosen as the drought condition for the observation.
 
 # Analysis
 
@@ -101,13 +99,13 @@ To determine if drought has an impact on the abundance and diversity of motile i
 
 $$H’ = -\sum_{i=1}^s p_i \log(p_i)$$ ~Equation~ ~1~
 
-I simplified the drought impacts variable to a binary of "Drought" and "No Drought". If a site experienced any drought impacts as described by the U.S. Drought Monitor in the observation year I assigned it drought for the entire year, if no drought impacts were recorded I assigned no drought. This simplification allowed for easier comparison between sites as not all sites experienced all drought conditions in all years. Additionally, I generated autocorrelation plots of mean number of organisms per plot and Shannon diversity index to confirm correlation between either variable and its value the previous year (Fig 2).
+I simplified the drought impacts variable to a binary of "Drought" or "No Drought". If a site experienced any drought impacts as described by the U.S. Drought Monitor in the observation year, I assigned it drought for the entire year, if no drought impacts were recorded I assigned no drought. This simplification allowed for easier comparison between sites as not all sites experienced all drought conditions in all years. Additionally, I generated autocorrelation plots of abundance (mean number of organisms per plot) and Shannon diversity index to confirm correlation between either variable and its value the previous year (Fig 2).
 
-I then fit fixed effects linear models, using the `felm()` function from the lfe package, that regressed drought condition in the current year on Shannon diversity index or mean number of organisms per plot. I repeated this process for regressing the previous years drought condition on Shannon diversity index and mean number of organisms per plot. The fixed effect model allowed each site to be held constant that any results would not be the result of inherent differences in diversity and abundance between sites.
+I then fit fixed effects linear models, using the `felm()` function from the lfe package, that regressed drought condition in the current year on Shannon diversity index and abundance. I repeated this process for regressing the previous years drought condition on Shannon diversity index and abundance. The fixed effect model allowed each site to be held constant such that any results would not be the result of inherent differences in diversity and abundance between sites.
 
 # Results
 
-The autocorrelation plots showed a significant correlation between both abundance (measured as mean number of organisms per plot) and Shannon diversity index in the current year and their value the following year. This gave me confidence in incorporating the prior year drought condition in the following models.
+The autocorrelation plots showed a significant correlation between both abundance and Shannon diversity index in the current year and their value the following year. This gave me confidence in incorporating the prior year drought condition in the following models.
 
 ```{r echo = FALSE}
 
@@ -188,15 +186,14 @@ lag_year_summary
 
 It was not surprising that the models produced through this analysis were not significant. The small sample size and high variability in the data make identifying trends extremely challenging. Additionally, the complexity of abiotic and biotic factors in the intertidal zone make it likely that any true impacts of drought are overshadowed by more established stressors such as environmental extremes, predation, and competition ^1,6,7^.
 
-The impacts of nutrient and environmental stress in the intertidal are most readily seen through changes in species distribution along latitudinal and elevation gradients rather than as changes in overall abundance and diversity ^1,2,7^. This analysis also ignores differential impacts between the high, mid, and lower intertidal zones. These are vastly different habitats that are characterized by different stressors and species composition making it is unlikely that drought would same impact in across zones ^5,7,16^.  
+The impacts of nutrient and environmental stress in the intertidal are most readily seen through changes in species distribution along latitudinal and elevation gradients rather than as changes in overall abundance and diversity ^1,2,7^. This analysis also ignores differential impacts between the high, mid, and lower intertidal zones. These are vastly different habitats that are characterized by different stressors and species composition making it is unlikely that drought would have the same impact in all zones ^5,7,16^.  
 
-Flaws in study design, notably the choice to exclude observations from summer, artificially reduced the sample size and obscured or eliminated any true relationship between drought and diversity or abundance. It would also be appropriate to choose ensure all sites included in the analysis have the types of streams that contribute TOM and would be impacted by drought ^10^. Additionally, this analysis lacked the complexity necessary to control for major drivers of species abundance and diversity in the rocky intertidal making any inference about a relationship between drought and motile invertebrate abundance or diversity irresponsible.
+Flaws in study design, notably the choice to exclude observations from summer,and failure to identify site that had streams to transport TOM, artificially reduced the sample size and obscured or eliminated any true relationship between drought and diversity or abundance. Additionally, this analysis lacked the complexity necessary to control for major drivers of species abundance and diversity in the rocky intertidal making any inference about a relationship between drought and motile invertebrate abundance or diversity irresponsible.
 
-While none of the models were statistically significant all showed a reduction in motile invertebrate diversity in non-drought years. Future research could focus on determining if this is a real trend or the result of random variation. Narrowing the scale of the analysis to within site rather than regional impacts may reveal other trends in how drought impacts the rocky intertidal.
+While none of the models were statistically significant all showed a reduction in motile invertebrate diversity in non-drought years. Future research could focus on determining if this is a real trend or the result of random variation in the data. Narrowing the scale of the analysis to within site rather than regional impacts may reveal other trends in how drought impacts motile invertebrates of the rocky intertidal.
 
-## Data Use Statements
-
-This study utilized data collected by the Multi-Agency Rocky Intertidal Network (MARINe): a long-term ecological consortium funded and supported by many groups. Please visit pacificrockyintertidal.org for a complete list of the MARINe partners responsible for monitoring and funding these data. Data management has been primarily supported by BOEM (Bureau of Ocean Energy Management), NPS (National Parks Service), The David & Lucile Packard Foundation, and United States Navy.
+## Note
+For more information on how the data were wrangled and all code used in this project please visit <https://github.com/jessicafrench/Drought-impact-on-rocky-intertidal-invertebrates>
 
 ## Supporting Figures
 
@@ -243,7 +240,7 @@ histograms + plot_annotation(title = 'Histograms Showing Data Distribution')
   
 ```
 
-~S. Fig. 2~
+~S.~ ~Fig.~ ~2~
 
 ```{r echo=FALSE}
 # create data summary table
@@ -256,7 +253,7 @@ kable(data_summary_table,
       caption = "Sample size by site and drought condition.")
 ```
 
-~S. Table. 1~
+~S.~ ~Table.~ ~1~
 
 ## References
 
