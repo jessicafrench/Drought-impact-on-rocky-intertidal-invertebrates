@@ -1,6 +1,7 @@
 ---
 title: "invert-data"
 output: pdf_document
+always_allow_html: true
 date: "2022-11-10"
 ---
 
@@ -65,6 +66,8 @@ The rocky intertidal zone is one of the most complex and challenging ecosystems 
 With climate change and changing patterns of precipitation, droughts are expected to occur more frequently and with greater severity and duration ^8^. Drought has been shown to impact species abundance and composition in freshwater stream communities through reduction in pool connectivity and increasing predation ^9^. In the rocky intertidal zone, I think reduction in terrestrial organic matter is a more likely cause of reduced abundance and diversity during drought. Small streams that drain directly into the ocean transport TOM in the form of leaf litter that is consumed by motile invertebrate grazers in the intertidal ^10^. Food availability throughout the year can have major impacts on reproductive output, larvae survival, and recruitment ^10,11^. This is why I hypothesize that drought will negatively impact abundance and diversity of motile invertebrates in the rocky intertidal zone in the Coast Range Ecoregion of California (Fig 1).
 
 ```{r echo = FALSE, include = FALSE}
+# install phantomjs
+webshot::install_phantomjs()
 # set tmap to interactive
 tmap_mode(mode = "view")
 ```
